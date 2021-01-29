@@ -16,22 +16,30 @@ class Cards:
                      back into the deck.
     """
     def __init__(self):
-        self.deck = dict()
+        self.keys = []
+        self.deck = self.deck_build(self)
         self.last_card = 0
-        self.shuffledDeck = dict()
+        self.shuffledDeck = {}
+        self.shuffle(self)
+
+
 
     def deck_build(self):
         tempDict = dict()
+        self.keys = []
         cardNumber = 1
         suits = ["C","D","H","S"]
         for i in range(0,4):
             for l in range(1,14):
                 card = suits[i] + str(l)
                 tempDict[cardNumber] = card
+                self.keys.append(cardNumber)
                 cardNumber += 1
-        self.deck = tempDict
+        return  tempDict
 
-    def shuffle(self,choice):
-        self.last_card = choice
+    def shuffle(self,choice=0):
+        if self.last_card != 0:
+            self.shuffledDeck[self.last_card] = self.deck[self.last_card]
         self.shuffledDeck = {key:val for key, val in self.deck.items()
         if key != self.last_card}
+        self.last_card = choice
