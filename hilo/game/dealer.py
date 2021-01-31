@@ -10,5 +10,5 @@ class Dealer:
     def dealCards(self):
         lastChoice = random.randint(1,52)
         cards.shuffle(lastChoice)
-        return cards.shuffledDeck
+        return cards.shuffledDeck[lastChoice]
         
