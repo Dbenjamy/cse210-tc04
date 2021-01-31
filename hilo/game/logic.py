@@ -1,5 +1,3 @@
-from game.director import Director
-
 class Logic():
     """ 
     The key responsibility of the class is to prompt the user to choose
@@ -16,23 +14,41 @@ class Logic():
 
     def __init__(self):
         #passing in result of last card from Director
-        self.director = Director()
         self.choice = False
 
 
-    def high_low(self):
+    def high_low(self, card1, card2):
         # assuming that I am calling from a file named director
         # and that their Method is called current_card
-        while self.director.result == True:
-            decision = input('Higher or lower? [h/l]: ').lower()
-            if decision == 'h':
+        #while self.director.result == True:
+        larger = "h"
+        valid_input = False
+
+        while valid_input == False:
+            decision = input('Higher or lower? [h/l]: ')
+            if decision == "h" or decision == "l":
+                valid_input = True
+                print("good input")
+            else: 
+                print('Please try again and provide a correct value [h/l]')
+
+        if card1 > card2:
+            larger = "h"
+        elif card1 < card2:
+            larger = "l"
+        else:
+            larger = "s"
+
+            if (decision == 'h') and (larger == "h")  or (decision == "l") and (larger == "l"):
                 self.choice = True
                 return self.choice
 
-            elif decision == 'l':
+            elif larger == "s":
+                self.choice = False
+                print("Cards match")
+                return self.choice
+            else:
                 self.choice = False
                 return self.choice
-  
-            else: 
-            # if input is invalid
-                print('Please try again and provide a correct value [h/l]')
+
+                
