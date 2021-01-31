@@ -1,5 +1,3 @@
-
-
 class Logic():
     """ 
     The key responsibility of the class is to prompt the user to choose
