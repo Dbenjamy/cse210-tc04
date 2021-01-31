@@ -1,3 +1,7 @@
+from game.logic import Logic
+
+print("made it this far")
+
 class Director:
     """
     Controls the flow and execution of the game. Handles most endgame scenarios.
@@ -29,15 +33,16 @@ class Director:
         Args:
             Self: an instance of director
         """
+
+        #Used to recieve high or low result from logic()
+        self.result = Logic()
+
         #Used to control the beginning and end of game
         self.keep_playing = True
 
         #Used to store the cards 
         self.card1 = 1  ## .dealer.getCard()##
         self.card2 = 2  ## .dealer.getCard()##
-
-        #Used to recieve high or low result from logic()
-        self.result = True
 
         #tracks the points
         self.points = 300
@@ -122,14 +127,11 @@ class Director:
             Self: An instance of Director
         """
         #ask logic for guess result
-        self.result ## .logic.check(self.guess, self.card1, self.card2)##
+        guess = self.result.high_low(self.card1, self.card2)
 
         # check the boolean from Logic() and calculate points
-        if self.result == True:
+        if guess == True:
             self.points += 100
-        elif self.result == False:
+        elif guess == False:
             self.points -= 75
 
-
-director = Director()
-director.startGame()
