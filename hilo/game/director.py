@@ -1,14 +1,9 @@
 from game.logic import Logic
-
-print("made it this far")
-
+from game.dealer import Dealer
 class Director:
     """
     Controls the flow and execution of the game. Handles most endgame scenarios.
     Tracks and displays the points, gets most input from the user.
-
-    NOTE FOR ME: "##" At the beginning and end of comment means replace with
-                proper code. It is referencing a different class.
 
     Atrributes:
         keep_playing (boolean): does the player want to keep playing?
@@ -34,18 +29,21 @@ class Director:
             Self: an instance of director
         """
 
-        #Used to recieve high or low result from logic()
-        self.result = Logic()
-
+        #Used to recieve high or low logic from logic()
+        self.logic = Logic()
+        self.dealer = Dealer()
         #Used to control the beginning and end of game
         self.keep_playing = True
 
         #Used to store the cards 
-        self.card1 = 1  ## .dealer.getCard()##
-        self.card2 = 2  ## .dealer.getCard()##
+        self.card1 = self.dealer.dealCards()
+        self.card2 = self.dealer.dealCards()
 
         #tracks the points
         self.points = 300
+
+        #which round you are in
+        self.roundNumber = 0
 
 
     def startGame(self):
@@ -57,7 +55,8 @@ class Director:
         #Loop will run the game
         while self.keep_playing == True:
             self.runGame()
-            self.endGame() #checks for end game scenarios before continuing
+            if self.keep_playing:
+                self.endGame() #checks for end game scenarios before continuing
 
     def runGame(self):
         """Excutes the game. Calls necessary methods and prompts user for input.
@@ -65,18 +64,6 @@ class Director:
         Args:
             Self: an instance of Director
         """
-
-        # first round of the game
-        # this block of code should only be executed once
-        round = 0
-        if round == 0:
-            self.card1 ## .dealer.getCard()##
-            round += 1
-        else:
-            pass
-
-        
-        self.card2 ## .dealer.getCard()##
 
         #display card1
         print("The card is: ", self.card1)
@@ -93,6 +80,7 @@ class Director:
         #card2 becomes card1 for the next round
         ## Do we need this line here? Or is this taken care of elsewhere? ##
         self.card1 = self.card2
+        self.card2 = self.dealer.dealCards()
 
     def endGame(self):
         """Contains logic for end of game scenarios.
@@ -102,22 +90,17 @@ class Director:
         Args:
             Self: An instance of Director
         """
+
         # Does the player have enough points?
-        if self.points == 0:
-            self.points = 0 #sets the points to 0
+        if self.points <= 0:
             print("You ran out of points. Better luck next time!")
             self.keep_playing = False
-
+            pass
         #Does the user wish to continue playing?
         elif self.points > 0:
             again = input("Keep playing? [y/n] ")
             if (again == "n"):
                 self.keep_playing = False
-            else:
-                pass
-        #Enough points and user continues
-        else:
-            self.keep_playing = True
 
     def computePoints(self):
         """Computes the new point total using the input from Logic().
@@ -126,12 +109,20 @@ class Director:
         Args:
             Self: An instance of Director
         """
-        #ask logic for guess result
-        guess = self.result.high_low(self.card1, self.card2)
+        #ask logic for guess logic
+        guess = self.logic.high_low(self.card1, self.card2)
 
-        # check the boolean from Logic() and calculate points
+        # check the boolean from Logic() and calculate points. You can
+        # lose if the cards have the same value, except if it's the
+        # first round.
         if guess == True:
             self.points += 100
         elif guess == False:
             self.points -= 75
-
+        elif guess == None and self.roundNumber == 0:
+            self.card2 = self.dealer.dealCards()
+            return self.computePoints()
+        else:
+            self.keep_playing = False
+            print("Cards match, game over!")
+        self.roundNumber += 1

@@ -9,7 +9,7 @@ class Cards:
             deck: A list of all 52 cards in a deck.
             last_card: remebers the last card used by the 'Dealer'.
     Methods:
-            deck_build:
+            _deck_build:
                     Builds the deck.
             shuffle: when a new card goes into last_card, the old card
                      will be put back in the deck. It is 'shuffled'
@@ -17,14 +17,14 @@ class Cards:
     """
     def __init__(self):
         self.keys = []
-        self.deck = self.deck_build(self)
+        self.deck = self._deck_build()
         self.last_card = 0
         self.shuffledDeck = {}
         self.shuffle(self)
 
 
 
-    def deck_build(self):
+    def _deck_build(self):
         tempDict = dict()
         self.keys = []
         cardNumber = 1
@@ -38,8 +38,6 @@ class Cards:
         return  tempDict
 
     def shuffle(self,choice=0):
-        if self.last_card != 0:
-            self.shuffledDeck[self.last_card] = self.deck[self.last_card]
         self.shuffledDeck = {key:val for key, val in self.deck.items()
         if key != self.last_card}
         self.last_card = choice

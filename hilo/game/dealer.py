@@ -1,14 +1,15 @@
-from game import Cards
-from hilo.game.director import Director
+from game.cards import Cards
 import random
 
 class Dealer:
     def __init__(self):
         self.cards = Cards()
-        lastChoice = 0
+        self.lastChoice = 0
         
     def dealCards(self):
-        lastChoice = random.randint(1,52)
-        cards.shuffle(lastChoice)
-        return cards.shuffledDeck[lastChoice]
-        
+        self.cards.shuffle(self.lastChoice)
+        self.lastChoice = random.randint(1,52)
+        try:
+            return self.cards.shuffledDeck[self.lastChoice]
+        except KeyError:
+            return self.dealCards()
